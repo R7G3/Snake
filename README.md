@@ -1,4 +1,4 @@
-# snake
+# Snake
 A simple console snake made as part of training with C#. The game has a menu, settings, control by clicking (without pressing enter). Maybe i'll add something later.
 
 #### I tried to make the menu the way it was not used to seeing in the console
