@@ -190,10 +190,6 @@ namespace Snake
 		{
 			stop = false;
 			Field = new string [y, x];
-			if (Field.GetLength(0) != y)
-			{
-				//Array.Resize<string>(ref Field, y, x); //how to resize 2d array? :c
-			}
 			FillField(Field);
 			int w = x / 2;
 			int h = y / 2;
