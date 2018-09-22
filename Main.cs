@@ -67,22 +67,6 @@ namespace Snake
 
 		static void Main(string[] args)
 		{
-			//Console.Beep(int frequency, int duration); //give brain crushing sound
-			
-			/*
-			█▓▒░ - walls
-			beauty borders:
-			╔═╦═╗ ┌─┬─┐
-			║ ║ ║ │ │ │
-			╠═╬═╣ ├─┼─┤
-			║ ║ ║ │ │ │
-			╚═╩═╝ └─┴─┘*/
-			
-			/* три строки ниже - костыли от микрософт, которые даже в виде
-			абсолютной копипасты с msdn категорически не хотят работать */
-			//Console.SetWindowSize(1, 1);
-			//Console.SetBufferSize(100, 26);
-			//Console.SetWindowSize(81, 25);
 			Console.CursorVisible = false;
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Menu.Show(menuEntries, mainMenu, key, handler, ref exit);

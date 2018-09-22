@@ -5,9 +5,9 @@ using System.Threading;
 
 namespace Snake
 {
-    class Menu
-    {
-        public static void Show(IDictionary<string, Action> menuEntries, List<string> menuList, System.ConsoleKey key, Action handler, ref bool exit)
+	class Menu
+	{
+		public static void Show(IDictionary<string, Action> menuEntries, List<string> menuList, System.ConsoleKey key, Action handler, ref bool exit)
 		{
 			string coursor=" ";
 			int position = 0;
@@ -19,7 +19,13 @@ namespace Snake
 				foreach (string item in menuEntries.Keys)
 				{
 					if (menuList.IndexOf(item)==position)
-					{ coursor = ">"; } else { coursor = " "; }
+					{
+						coursor = ">";
+					}
+					else
+					{
+						coursor = " ";
+					}
 					Console.WriteLine("{0}{1}", coursor, item);
 				}
 
@@ -32,12 +38,12 @@ namespace Snake
 				if (key == ConsoleKey.UpArrow)
 				{
 					if (position>0)
-					{position--;}
+						position--;
 				}
 				else if (key == ConsoleKey.DownArrow)
 				{
 					if (position<menuList.Count-1)
-					{position++;}
+						position++;
 				}
 				else if (key == ConsoleKey.Enter)
 				{
@@ -52,5 +58,5 @@ namespace Snake
 				}
 			};
 		}
-    }
+	}
 }

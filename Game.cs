@@ -9,14 +9,14 @@ namespace Snake
 	{
 		public int Y { get; set; }
 		public int X { get; set; }
-		public string Symbol = "X";
+		public static string Symbol = "X";
 	}
 
 	class Food
 	{
 		public int Y { get; set; }
 		public int X { get; set; }
-		public string Symbol = "¤";
+		public static string Symbol = "¤";
 	}
 
 	class HeadPart
@@ -30,179 +30,33 @@ namespace Snake
 		public static string[,] Field;
 		public static Queue<SnakePart> Snake = new Queue<SnakePart>();
 		public static int score = 0;
-		public static string SSnake = "X";
-		public static string SFood="¤";
 		public static Action moveHandler = null;
 		public static bool stop = false;
 		public static HeadPart head = new HeadPart { Y = 0, X = 0 };
 		public static Food food = new Food();
-
-		public static IDictionary<System.ConsoleKey, Action> Direction = new Dictionary<System.ConsoleKey, Action>
-		{
-			{ ConsoleKey.UpArrow, MoveUP },
-			{ ConsoleKey.DownArrow, MoveDOWN },
-			{ ConsoleKey.LeftArrow, MoveLEFT },
-			{ ConsoleKey.RightArrow, MoveRIGHT },
-			{ ConsoleKey.Escape, EndGame }
-		};
+		public static char[] GameOver = new char[10] { 'G', 'a', 'm', 'e', ' ', 'o', 'v', 'e', 'r', '!' };
 
 		public static void EndGame()
 		{
+			var Y = Field.GetLength(0);
+			var X = Field.GetLength(1);
+			Console.SetCursorPosition(X/2 - 5, Y/2);
+			for (int i=0; i<10; i++)
+			{
+				Console.Write(GameOver[i]);
+				Thread.Sleep(50);
+			}
+			Thread.Sleep(500);
+
 			Snake.Clear();
-			Console.WriteLine("YOU LOOSE! Scores: {0}", score); //debug
-			Thread.Sleep(1000); //debug
+			//Console.WriteLine("YOU LOOSE! Scores: {0}", score); //debug
+			//Thread.Sleep(1000); //debug
 			moveHandler = null;
 			score = 0;
 			stop = true;
 		}
 
-		public static void MoveUP()
-		{
-			int nY = head.Y-1;
-			int nX = head.X;
-			if (nY > -1) //-1 wtf?!
-			{
-				if (Field[head.Y - 1, head.X] == "¤")
-				{
-					Field[food.Y, food.X] = " ";
-					GenerateFood(Field, SSnake, food);
-					head.Y = nY;
-					head.X = nX;
-					SnakePart npart = new SnakePart { Y = nY, X = nX };
-					Snake.Enqueue(npart);
-					score+=100;
-					UpdateField(Field, food);
-				}
-				else if (Field[head.Y-1, head.X] == " ")
-				{
-					SnakePart npart = new SnakePart { Y = nY, X = nX };
-					Snake.Enqueue(npart);
-					Snake.Dequeue();
-					head.Y = nY;	// update info about head
-					head.X = nX;
-				}
-				else
-				{
-					EndGame();
-				}
-			}
-			else
-			{
-				EndGame(); //мб писать о проигрыше в центре экрана через set coursor position?
-			}
-		}
-
-		public static void MoveDOWN()
-		{
-			int nY = head.Y+1;
-			int nX = head.X;
-			var Border = Field.GetLength(0);
-			if (nY < Border)
-			{
-				if (Field[head.Y + 1, head.X] == "¤")
-				{
-					Field[food.Y, food.X] = " ";
-					GenerateFood(Field, SSnake, food);
-					head.Y = nY;
-					head.X = nX;
-					SnakePart npart = new SnakePart { Y = nY, X = nX };
-					Snake.Enqueue(npart);
-					score+=100;
-					UpdateField(Field, food);
-				}
-				else if (Field[head.Y+1, head.X] == " ")
-				{
-					SnakePart npart = new SnakePart { Y = nY, X = nX };
-					Snake.Enqueue(npart);
-					Snake.Dequeue();
-					head.Y = nY;
-					head.X = nX;
-				}
-				else
-				{
-					EndGame();
-				}
-			}
-			else
-			{
-				EndGame();
-			}
-		}
-
-		public static void MoveLEFT()
-		{
-			int nY = head.Y;
-			int nX = head.X-1;
-			if (nX > -1)
-			{
-				if (Field[head.Y, head.X - 1] == "¤")
-				{
-					Field[food.Y, food.X] = " ";
-					GenerateFood(Field, SSnake, food);
-					head.Y = nY;
-					head.X = nX;
-					SnakePart npart = new SnakePart { Y = nY, X = nX };
-					Snake.Enqueue(npart);
-					score+=100;
-					UpdateField(Field, food);
-				}
-				else if (Field[head.Y, head.X - 1] == " ")
-				{
-					SnakePart npart = new SnakePart { Y = nY, X = nX };
-					Snake.Enqueue(npart);
-					Snake.Dequeue();
-					head.Y = nY;
-					head.X = nX;
-				}
-				else
-				{
-					EndGame();
-				}
-			}
-			else
-			{
-				EndGame();
-			}
-		}
-
-		public static void MoveRIGHT()
-		{
-			int nY = head.Y;
-			int nX = head.X+1;
-			var Border = Field.GetLength(1);
-			if (nX < Border)
-			{
-				if (Field[head.Y, head.X + 1] == "¤")
-				{
-					Field[food.Y, food.X] = " ";
-					GenerateFood(Field, SSnake, food);
-					head.Y = nY;
-					head.X = nX;
-					SnakePart npart = new SnakePart { Y = nY, X = nX };
-					Snake.Enqueue(npart);
-					score+=100;
-					UpdateField(Field, food);
-				}
-				else if (Field[head.Y, head.X + 1] == " ")
-				{
-					SnakePart npart = new SnakePart { Y = nY, X = nX };
-					Snake.Enqueue(npart);
-					Snake.Dequeue();
-					head.Y = nY;
-					head.X = nX;
-				}
-				else
-				{
-					EndGame();
-				}
-			}
-			else
-			{
-				EndGame();
-			}
-		}
-
-		public static void FindPath(ConsoleKey key, IDictionary<System.ConsoleKey, Action> Direction)
+		public static void FindPath(ConsoleKey key)
 		{
 			if (key == ConsoleKey.UpArrow)
 			{
@@ -284,12 +138,16 @@ namespace Snake
 					EndGame();
 				}
 			}
+			if (key == ConsoleKey.Escape)
+			{
+				EndGame();
+			}
 		}
 
 		public static void Eat(int nY, int nX)
 		{
 			Field[food.Y, food.X] = " ";
-			GenerateFood(Field, SSnake, food);
+			GenerateFood(Field, food);
 			head.Y = nY;
 			head.X = nX;
 			SnakePart npart = new SnakePart { Y = nY, X = nX };
@@ -318,35 +176,17 @@ namespace Snake
 
 				if (Console.KeyAvailable == true)
 				{
-					//Console.Beep(300, 50);
-					//Console.Beep(250, 50);
-					//Console.Beep(200, 300);
 					key = Console.ReadKey().Key;
-					Direction.TryGetValue(key, out moveHandler);
-					if (moveHandler != null)
-					{
-						Thread.Sleep(delay/2);
-						moveHandler();
-					}
+					FindPath(key);
+					Thread.Sleep(delay/2);
 				}
 				else
 				{
-					if (moveHandler != null)
-					{
-						Thread.Sleep(delay/2);
-						moveHandler();
-					}
+					FindPath(key);
+					Thread.Sleep(delay/2);
 				}
-				//Timer timer = new Timer(EmptyMethod, null, 0, delay);//maybe don't need kagbe?)
 			};
 		}
-
-		/*public static void newResizeArray<T>(ref T[,] arr, int y, int x, int dimension)
-		{
-			T[,] newArray = new T[y, x, dimension];
-			Array.Copy(arr, newArray, arr.Length);
-			arr = newArray;
-		}*/
 
 		public static void Initialization(int x, int y, int speed, int delay, System.ConsoleKey key)
 		{
@@ -368,18 +208,8 @@ namespace Snake
 			head.Y = h;
 			head.X = w;
 			UpdateField(Field, food);
-			GenerateFood(Field, SSnake, food);
+			GenerateFood(Field, food);
 			Play(part1, Field, food, speed, delay, key);
-		}
-
-		public static void CheckTurn() //maybe can delete?
-		{
-			//
-		}
-		
-		public static void EmptyMethod(Object obj) //maybe can delete?
-		{
-			//yeah baby, it's so cool! (-_-)
 		}
 
 		public static void UpdateField(string[,] Field, Food food)
@@ -387,12 +217,9 @@ namespace Snake
 			FillField(Field); 
 			foreach (SnakePart parts in Snake)
 			{
-				//Console.ForegroundColor = ConsoleColor.Green;
-				Field[parts.Y, parts.X] = parts.Symbol;
+				Field[parts.Y, parts.X] = SnakePart.Symbol;
 			}
-			//Console.ForegroundColor = ConsoleColor.Cyan;
-			Field[food.Y, food.X] = food.Symbol;
-			//Console.ForegroundColor = ConsoleColor.Yellow;
+			Field[food.Y, food.X] = Food.Symbol;
 		}
 
 		public static void FillField(string[,] Field)
@@ -435,23 +262,23 @@ namespace Snake
 			}
 		}
 
-		public static void GenerateFood(string[,] Field, string Snake, Food Food)
-        {
-            Random random = new Random();
-            var rows = Field.GetLength(0);
+		public static void GenerateFood(string[,] Field, Food Food)
+		{
+			Random random = new Random();
+			var rows = Field.GetLength(0);
 			var cols = Field.GetLength(1);
-            bool check = true;
-            do{
-                int y = random.Next(1, rows-1);
-                int x = random.Next(1, cols-1);
-                if (Field[y,x]!=SSnake)
-                {
+			bool check = true;
+			do{
+				int y = random.Next(1, rows-1);
+				int x = random.Next(1, cols-1);
+				if (Field[y,x]!=SnakePart.Symbol)
+				{
 					Food.Y=y;
 					Food.X=x;
-                    check = false;
-                }
-            }while(check);
-        }
+					check = false;
+				}
+			}while(check);
+		}
 
 		public static void OLDFillField(string[,] Field)
 		{
@@ -473,12 +300,12 @@ namespace Snake
 			var fieldSize = rows * cols;
 
 			Console.WriteLine("Speed: {0}\tScores: {1}", speed, score);
-            Console.Write("|");
-            for(int i=0; i<cols; i++)
+			Console.Write("|");
+			for(int i=0; i<cols; i++)
 			{
 				Console.Write("-");
 			}
-            Console.Write("|");
+			Console.Write("|");
 			Console.WriteLine();
 			
 			for (int row = 0; row < rows; ++row)
@@ -491,13 +318,13 @@ namespace Snake
 				Console.Write("|\n");
 			}
 
-            Console.Write("|");
-            for(int i=0; i<cols; i++)
+			Console.Write("|");
+			for(int i=0; i<cols; i++)
 			{
 				Console.Write("-");
 			}
-            Console.Write("|\n");
-            Console.WriteLine("Use arrow-buttons for moving");
+			Console.Write("|\n");
+			Console.WriteLine("Use arrow-buttons for moving");
 		}
 	}
 }
