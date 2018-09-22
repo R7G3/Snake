@@ -1,7 +1,10 @@
 Snake.csproj
 compstring.txt
+<<<<<<< HEAD
 .vscode/launch.json
 .vscode/tasks.json
+=======
+>>>>>>> 1a67aad08cb96fb7b55d5a3e1f77ded81d2bab62
 bin/Debug/netcoreapp2.1/Snake.dll
 bin/Debug/netcoreapp2.1/Snake.pdb
 bin/Debug/netcoreapp2.1/Snake.deps.json
