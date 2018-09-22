@@ -9,14 +9,14 @@ namespace Snake
 	{
 		public int Y { get; set; }
 		public int X { get; set; }
-		public static string Symbol = "X";
+		public static readonly string Symbol = "X";
 	}
 
 	class Food
 	{
 		public int Y { get; set; }
 		public int X { get; set; }
-		public static string Symbol = "¤";
+		public static readonly string Symbol = "¤";
 	}
 
 	class HeadPart
@@ -49,8 +49,6 @@ namespace Snake
 			Thread.Sleep(500);
 
 			Snake.Clear();
-			//Console.WriteLine("YOU LOOSE! Scores: {0}", score); //debug
-			//Thread.Sleep(1000); //debug
 			moveHandler = null;
 			score = 0;
 			stop = true;
@@ -278,53 +276,6 @@ namespace Snake
 					check = false;
 				}
 			}while(check);
-		}
-
-		public static void OLDFillField(string[,] Field)
-		{
-			var rows = Field.GetLength(0);
-			var cols = Field.GetLength(1);
-			for (int i = 0; i < rows; i++)
-			{
-				for (int j = 0; j < cols; j++)
-				{
-					Field[i, j] = " ";
-				}
-			}
-		}
-
-		public static void OLDPrintField(string[,] Field, int score, int speed)
-		{
-			var rows = Field.GetLength(0);
-			var cols = Field.GetLength(1);
-			var fieldSize = rows * cols;
-
-			Console.WriteLine("Speed: {0}\tScores: {1}", speed, score);
-			Console.Write("|");
-			for(int i=0; i<cols; i++)
-			{
-				Console.Write("-");
-			}
-			Console.Write("|");
-			Console.WriteLine();
-			
-			for (int row = 0; row < rows; ++row)
-			{
-				Console.Write("|");
-				for (int col = 0; col < cols; ++col)
-				{
-					Console.Write("{0}", Field[row, col]);
-				}
-				Console.Write("|\n");
-			}
-
-			Console.Write("|");
-			for(int i=0; i<cols; i++)
-			{
-				Console.Write("-");
-			}
-			Console.Write("|\n");
-			Console.WriteLine("Use arrow-buttons for moving");
 		}
 	}
 }
