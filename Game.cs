@@ -163,36 +163,36 @@ namespace Snake
 			head.X = nX;
 		}
 
-		public static void Play(SnakePart part, string[,] Field, Food food, int speed, int delay, System.ConsoleKey key)
+		public static void Play(SnakePart part, string[,] Field, Food food, System.ConsoleKey key)
 		{
 			while(!stop)
 			{
 				Console.Clear();
 				UpdateField(Field, food);
-				PrintField(Field, score, speed);
-				Thread.Sleep(delay/2);
+				PrintField(Field, score, Settings.speed);
+				Thread.Sleep(Settings.delay/2);
 
 				if (Console.KeyAvailable == true)
 				{
 					key = Console.ReadKey().Key;
 					FindPath(key);
-					Thread.Sleep(delay/2);
+					Thread.Sleep(Settings.delay/2);
 				}
 				else
 				{
 					FindPath(key);
-					Thread.Sleep(delay/2);
+					Thread.Sleep(Settings.delay/2);
 				}
 			};
 		}
 
-		public static void Initialization(int x, int y, int speed, int delay, System.ConsoleKey key)
+		public static void Initialization(System.ConsoleKey key)
 		{
 			stop = false;
-			Field = new string [y, x];
+			Field = new string [Settings.y, Settings.x];
 			FillField(Field);
-			int w = x / 2;
-			int h = y / 2;
+			int w = Settings.x / 2;
+			int h = Settings.y / 2;
 			SnakePart part1 = new SnakePart { Y = h+2, X = w };
 			Snake.Enqueue(part1);
 			SnakePart part2 = new SnakePart { Y = h+1, X = w };
@@ -203,7 +203,7 @@ namespace Snake
 			head.X = w;
 			UpdateField(Field, food);
 			GenerateFood(Field, food);
-			Play(part1, Field, food, speed, delay, key);
+			Play(part1, Field, food, key);
 		}
 
 		public static void UpdateField(string[,] Field, Food food)

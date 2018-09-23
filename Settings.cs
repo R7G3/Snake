@@ -7,7 +7,12 @@ namespace Snake
 {
 	class Settings
 	{
-		public static void Speed(ref int delay, ref int speed, System.ConsoleKey key)
+		public static int delay = 400;
+		public static int speed = (1000 - Settings.delay) / 100;
+		public static int x=16;
+		public static int y=8;
+
+		public static void Speed(System.ConsoleKey key)
 		{
 			while (true)
 			{
@@ -53,7 +58,7 @@ namespace Snake
 			};
 		}
 
-		public static void Size(ref int x, ref int y, System.ConsoleKey key, List<string> sizes)
+		public static void Size(System.ConsoleKey key, List<string> sizes)
 		{
 			int position = 0;
 			while(true)

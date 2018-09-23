@@ -28,17 +28,17 @@ namespace Snake
 
 		public static void SetSizeCommand()
 		{
-			 Settings.Size(ref x, ref y,  key, sizes);
+			 Settings.Size(key, sizes);
 		}
 
 		public static void SetSpeedCommand()
 		{
-			Settings.Speed(ref delay, ref speed, key);
+			Settings.Speed(key);
 		}
 
 		public static void StartCommand()
 		{
-			Game.Initialization(x, y, speed, delay, key);
+			Game.Initialization(key);
 			handler = null;
 		}
 
@@ -57,10 +57,6 @@ namespace Snake
 		public static Action handler = null;
 		public static bool exit = false;
 		public static System.ConsoleKey key = 0;
-		public static int x=16;
-		public static int y=8;
-		public static int delay = 400;
-		public static int speed = (1000 - delay) / 100;
 		public static List<string> mainMenu = new List<string>() {"Start", "Settings", "About", "Exit"};
 		public static List<string> setMenu = new List<string>() {"Scale of field", "Speed"};
 		public static List<string> sizes = new List<string>() {"Small", "Medium", "Large", "Full"};
