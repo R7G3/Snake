@@ -8,7 +8,7 @@ namespace Snake
 	class Settings
 	{
 		public static int delay;
-		public static int x=16;
+		public static int x=10;
 		public static int y=8;
 
 		public const int MAX_DELAY_IN_MS = 1000;
@@ -97,19 +97,19 @@ namespace Snake
 				{
 					if (position == 0)
 					{
-						y = 8; x = 16;
+						y = 8; x = 10;
 					}
 					else if (position == 1)
 					{
-						y = 10; x = 20;
+						y = 12; x = 16;
 					}
 					else if (position == 2)
 					{
-						y = 20; x = 40;
+						y = 18; x = 20;
 					}
 					else if (position == 3)
 					{
-						y = 22; x = 79;
+						y = 22; x = 38;
 					}
 					Console.WriteLine("Saved size: {0}", sizes[position]);
 					Console.WriteLine("Debug! {0}x{1}", y, x);

@@ -9,14 +9,14 @@ namespace Snake
 	{
 		public int Y { get; set; }
 		public int X { get; set; }
-		public static readonly string Symbol = "X";
+		public static readonly string Symbol = "><";
 	}
 
 	class Food
 	{
 		public int Y { get; set; }
 		public int X { get; set; }
-		public static readonly string Symbol = "¤";
+		public static readonly string Symbol = "[]";
 	}
 
 	class HeadPart
@@ -40,7 +40,7 @@ namespace Snake
 		{
 			var Y = Field.GetLength(0);
 			var X = Field.GetLength(1);
-			Console.SetCursorPosition(X/2 - 5, Y/2);
+			Console.SetCursorPosition(X - 5, Y/2);
 			for (int i=0; i<10; i++)
 			{
 				Console.Write(GameOver[i]);
@@ -61,11 +61,11 @@ namespace Snake
 				int nY = head.Y-1; int nX = head.X;
 				if (nY > -1)
 				{
-					if (Field[head.Y - 1, head.X] == "¤")
+					if (Field[head.Y - 1, head.X] == "[]")
 					{
 						Eat(nY, nX);
 					}
-					else if (Field[head.Y-1, head.X] == " ")
+					else if (Field[head.Y-1, head.X] == "  ")
 					{
 						Move(nY, nX);
 					}
@@ -80,11 +80,11 @@ namespace Snake
 				int nY = head.Y+1; int nX = head.X; var border = Field.GetLength(0);
 				if (nY < border)
 				{
-					if (Field[head.Y + 1, head.X] == "¤")
+					if (Field[head.Y + 1, head.X] == "[]")
 					{
 						Eat(nY, nX);
 					}
-					else if (Field[head.Y+1, head.X] == " ")
+					else if (Field[head.Y+1, head.X] == "  ")
 					{
 						Move(nY, nX);
 					}
@@ -99,11 +99,11 @@ namespace Snake
 				int nY = head.Y; int nX = head.X-1;
 				if (nX > -1)
 				{
-					if (Field[head.Y, head.X - 1] == "¤")
+					if (Field[head.Y, head.X - 1] == "[]")
 					{
 						Eat(nY, nX);
 					}
-					else if (Field[head.Y, head.X - 1] == " ")
+					else if (Field[head.Y, head.X - 1] == "  ")
 					{
 						Move(nY, nX);
 					}
@@ -118,11 +118,11 @@ namespace Snake
 				int nY = head.Y; int nX = head.X+1; var border = Field.GetLength(1);
 				if (nX < border)
 				{
-					if (Field[head.Y, head.X + 1] == "¤")
+					if (Field[head.Y, head.X + 1] == "[]")
 					{
 						Eat(nY, nX);
 					}
-					else if (Field[head.Y, head.X + 1] == " ")
+					else if (Field[head.Y, head.X + 1] == "  ")
 					{
 						Move(nY, nX);
 					}
@@ -227,15 +227,15 @@ namespace Snake
 				{
 					if(i == 0 || i == rows-1)
 					{
-						Field[i, j] = "░";
+						Field[i, j] = "░░";
 					}
 					else if (j == 0 || j == cols-1)
 					{
-						Field[i, j] = "░";
+						Field[i, j] = "░░";
 					}
 					else
 					{
-						Field[i, j] = " ";
+						Field[i, j] = "  ";
 					}
 				}
 			}
