@@ -188,6 +188,7 @@ namespace Snake
 
 		public static void Initialization(System.ConsoleKey key)
 		{
+			Settings.delay = Settings.GetDelay();
 			stop = false;
 			Field = new string [Settings.y, Settings.x];
 			FillField(Field);

@@ -7,16 +7,22 @@ namespace Snake
 {
 	class Settings
 	{
-		public static int delay = 400;
-		public static int speed = (1000 - Settings.delay) / 100;
+		public static int delay;
 		public static int x=16;
 		public static int y=8;
+
+		public const int MAX_DELAY_IN_MS = 1000;
+		public const int SPEED_STEP = 100;
+		public static int speed = 6;
+		public static int GetDelay()
+		{
+			return MAX_DELAY_IN_MS - (speed * SPEED_STEP);
+		}
 
 		public static void Speed(System.ConsoleKey key)
 		{
 			while (true)
 			{
-				//speed = (1000 - delay) / 100;
 				Console.Clear();
 				Console.Write("<");
 				for (int i=1; i<10; i++)
@@ -46,7 +52,6 @@ namespace Snake
 				}
 				else if (key == ConsoleKey.Enter)
 				{
-					delay = 1000 - (speed * 100);
 					Console.WriteLine("Saved speed: {0}", speed);
 					Thread.Sleep(1000);
 					break;
