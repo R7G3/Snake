@@ -9,44 +9,26 @@ namespace Snake
 	{
 		public static IDictionary<string, Action> menuEntries = new Dictionary<string, Action>
 		{
-			{ "Start", StartCommand },
-			{ "Settings", SettingsMenu },
+			{ "Start", () => {
+					Game.Initialization(key);
+					handler = null;
+				} },
+			{ "Settings", () => Menu.Show(settingsEntries, setMenu, key, handler, ref exit) },
 			{ "About", AboutCommand },
 			{ "Exit", ExitCommand }
 		};
 
 		public static IDictionary<string, Action> settingsEntries = new Dictionary<string, Action>
 		{
-			{"Scale of field", SetSizeCommand},
-			{"Speed", SetSpeedCommand},
+			{"Scale of field", () => Settings.Size(key, sizes) },
+			{"Speed", () => Settings.Speed(key) },
 		};
-
-		public static void SettingsMenu()
-		{
-			Menu.Show(settingsEntries, setMenu, key, handler, ref exit);
-		}
-
-		public static void SetSizeCommand()
-		{
-			 Settings.Size(key, sizes);
-		}
-
-		public static void SetSpeedCommand()
-		{
-			Settings.Speed(key);
-		}
-
-		public static void StartCommand()
-		{
-			Game.Initialization(key);
-			handler = null;
-		}
 
 		public static void AboutCommand()
 		{
 			Console.Clear();
 			Console.WriteLine("Vadim \"RAGE\" Trofimov\n2018");
-			Console.ReadLine();
+			Console.ReadKey();
 		}
 
 		public static void ExitCommand()
