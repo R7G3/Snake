@@ -163,8 +163,9 @@ namespace Snake
 			head.X = nX;
 		}
 
-		public static void Play(SnakePart part, string[,] Field, Food food, System.ConsoleKey key)
+		public static void Play(string[,] Field)
 		{
+			System.ConsoleKey key = 0;
 			while(!stop)
 			{
 				Console.Clear();
@@ -186,7 +187,7 @@ namespace Snake
 			};
 		}
 
-		public static void Initialization(System.ConsoleKey key)
+		public static void Initialization()
 		{
 			Settings.delay = Settings.GetDelay();
 			stop = false;
@@ -204,7 +205,7 @@ namespace Snake
 			head.X = w;
 			UpdateField(Field, food);
 			GenerateFood(Field, food);
-			Play(part1, Field, food, key);
+			Play(Field);
 		}
 
 		public static void UpdateField(string[,] Field, Food food)

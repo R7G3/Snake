@@ -10,7 +10,7 @@ namespace Snake
 		public static IDictionary<string, Action> menuEntries = new Dictionary<string, Action>
 		{
 			{ "Start", () => {
-					Game.Initialization(key);
+					Game.Initialization();
 					handler = null;
 				} },
 			{ "Settings", () => Menu.Show(settingsEntries, setMenu, key, handler, ref exit) },
