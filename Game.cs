@@ -58,14 +58,14 @@ namespace Snake
 		{
 			if (key == ConsoleKey.UpArrow)
 			{
-				int nY = head.Y-1; int nX = head.X;
+				int nY = head.Y - 1; int nX = head.X;
 				if (nY > -1)
 				{
-					if (Field[head.Y - 1, head.X] == "[]")
+					if (Field[head.Y - 1, head.X] == Food.Symbol)
 					{
 						Eat(nY, nX);
 					}
-					else if (Field[head.Y-1, head.X] == "  ")
+					else if (Field[head.Y - 1, head.X] == "  ")
 					{
 						Move(nY, nX);
 					}
@@ -77,14 +77,14 @@ namespace Snake
 			}
 			if (key == ConsoleKey.DownArrow)
 			{
-				int nY = head.Y+1; int nX = head.X; var border = Field.GetLength(0);
+				int nY = head.Y + 1; int nX = head.X; var border = Field.GetLength(0);
 				if (nY < border)
 				{
-					if (Field[head.Y + 1, head.X] == "[]")
+					if (Field[head.Y + 1, head.X] == Food.Symbol)
 					{
 						Eat(nY, nX);
 					}
-					else if (Field[head.Y+1, head.X] == "  ")
+					else if (Field[head.Y + 1, head.X] == "  ")
 					{
 						Move(nY, nX);
 					}
@@ -96,10 +96,10 @@ namespace Snake
 			}
 			if (key == ConsoleKey.LeftArrow)
 			{
-				int nY = head.Y; int nX = head.X-1;
+				int nY = head.Y; int nX = head.X - 1;
 				if (nX > -1)
 				{
-					if (Field[head.Y, head.X - 1] == "[]")
+					if (Field[head.Y, head.X - 1] == Food.Symbol)
 					{
 						Eat(nY, nX);
 					}
@@ -115,10 +115,10 @@ namespace Snake
 			}
 			if (key == ConsoleKey.RightArrow)
 			{
-				int nY = head.Y; int nX = head.X+1; var border = Field.GetLength(1);
+				int nY = head.Y; int nX = head.X + 1; var border = Field.GetLength(1);
 				if (nX < border)
 				{
-					if (Field[head.Y, head.X + 1] == "[]")
+					if (Field[head.Y, head.X + 1] == Food.Symbol)
 					{
 						Eat(nY, nX);
 					}
