@@ -25,6 +25,18 @@ namespace Snake
 		public int X { get; set; }
 	}
 
+	class Position
+	{
+		public int y { get; set; }
+		public int x { get; set; }
+
+		public Position(int y, int x)
+		{
+			this.y = y;
+			this.x = x;
+		}
+	}
+
 	class Game
 	{
 		public static string[,] Field;
@@ -35,6 +47,43 @@ namespace Snake
 		public static HeadPart head = new HeadPart { Y = 0, X = 0 };
 		public static Food food = new Food();
 		public static char[] GameOver = new char[10] { 'G', 'a', 'm', 'e', ' ', 'o', 'v', 'e', 'r', '!' };
+
+		private static Position position = new Position(0, 0);
+
+		public static Action switcher = null;
+		public static Dictionary<System.ConsoleKey, Action> directionSwitcher = new Dictionary<System.ConsoleKey, Action>
+		{
+			{System.ConsoleKey.UpArrow, () => {
+					position.y += -1; position.x += 0;
+					} },
+			{System.ConsoleKey.DownArrow, () => {
+					position.y += 1; position.x += 0;
+					} },
+			{System.ConsoleKey.LeftArrow, () => {
+					position.y += 0; position.x += -1;
+					} },
+			{System.ConsoleKey.RightArrow, () => {
+					position.y += 0; position.x += 1;
+					} }
+		};
+
+		public static void FindPath(ConsoleKey key)
+		{
+			directionSwitcher.TryGetValue(key, out switcher);
+			switcher();
+			if (Field[position.y, position.x] == Food.Symbol)
+			{
+				Eat(position.y, position.x);
+			}
+			else if (Field[head.Y - 1, head.X] == "  ")
+			{
+				Move(position.y, position.x);
+			}
+			else
+			{
+				EndGame();
+			}
+		}
 
 		public static void EndGame()
 		{
@@ -52,94 +101,6 @@ namespace Snake
 			moveHandler = null;
 			score = 0;
 			stop = true;
-		}
-
-		public static void FindPath(ConsoleKey key)
-		{
-			if (key == ConsoleKey.UpArrow)
-			{
-				int nY = head.Y - 1; int nX = head.X;
-				if (nY > -1)
-				{
-					if (Field[head.Y - 1, head.X] == Food.Symbol)
-					{
-						Eat(nY, nX);
-					}
-					else if (Field[head.Y - 1, head.X] == "  ")
-					{
-						Move(nY, nX);
-					}
-					else
-					{
-						EndGame();
-					}
-				}
-			}
-			if (key == ConsoleKey.DownArrow)
-			{
-				int nY = head.Y + 1; int nX = head.X; var border = Field.GetLength(0);
-				if (nY < border)
-				{
-					if (Field[head.Y + 1, head.X] == Food.Symbol)
-					{
-						Eat(nY, nX);
-					}
-					else if (Field[head.Y + 1, head.X] == "  ")
-					{
-						Move(nY, nX);
-					}
-					else
-					{
-						EndGame();
-					}
-				}
-			}
-			if (key == ConsoleKey.LeftArrow)
-			{
-				int nY = head.Y; int nX = head.X - 1;
-				if (nX > -1)
-				{
-					if (Field[head.Y, head.X - 1] == Food.Symbol)
-					{
-						Eat(nY, nX);
-					}
-					else if (Field[head.Y, head.X - 1] == "  ")
-					{
-						Move(nY, nX);
-					}
-					else
-					{
-						EndGame();
-					}
-				}
-			}
-			if (key == ConsoleKey.RightArrow)
-			{
-				int nY = head.Y; int nX = head.X + 1; var border = Field.GetLength(1);
-				if (nX < border)
-				{
-					if (Field[head.Y, head.X + 1] == Food.Symbol)
-					{
-						Eat(nY, nX);
-					}
-					else if (Field[head.Y, head.X + 1] == "  ")
-					{
-						Move(nY, nX);
-					}
-					else
-					{
-						EndGame();
-					}
-				}
-				else
-				{
-					EndGame();
-				}
-			}
-			if (key == ConsoleKey.Escape)
-			{
-				EndGame();
-			}
 		}
 
 		public static void Eat(int nY, int nX)
@@ -165,7 +126,7 @@ namespace Snake
 
 		public static void Play(string[,] Field)
 		{
-			System.ConsoleKey key = 0;
+			System.ConsoleKey key = System.ConsoleKey.UpArrow;
 			while(!stop)
 			{
 				Console.Clear();
@@ -201,6 +162,8 @@ namespace Snake
 			Snake.Enqueue(part2);
 			SnakePart part3 = new SnakePart { Y = h, X = w };
 			Snake.Enqueue(part3);
+			position.y = part3.Y;
+			position.x = part3.X;
 			head.Y = h;
 			head.X = w;
 			UpdateField(Field, food);
