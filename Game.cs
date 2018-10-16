@@ -5,6 +5,14 @@ using System.Threading;
 
 namespace Snake
 {
+	enum FieldObject {
+		SNAKE_PART,
+		FOOD,
+		EMPTY,
+		WALL
+	}
+
+
 	class SnakePart
 	{
 		public int Y { get; set; }
@@ -35,52 +43,48 @@ namespace Snake
 			this.y = y;
 			this.x = x;
 		}
+
+		public Position Add(Position other) {
+			return new Position(y + other.y, x + other.x);
+		}
+
+		public static readonly Position UP = new Position(-1, 0);
+		public static readonly Position DOWN = new Position(1, 0);
+		public static readonly Position LEFT = new Position(0, -1);
+		public static readonly Position RIGHT = new Position(0, 1);
 	}
 
 	class Game
 	{
 		public static string[,] Field;
-		public static Queue<SnakePart> Snake = new Queue<SnakePart>();
+		public static Queue<Position> Snake = new Queue<Position>();
 		public static int score = 0;
 		public static Action moveHandler = null;
 		public static bool stop = false;
-		public static HeadPart head = new HeadPart { Y = 0, X = 0 };
-		public static Food food = new Food();
+		public static Position head = new Position(0, 0);
 		public static char[] GameOver = new char[10] { 'G', 'a', 'm', 'e', ' ', 'o', 'v', 'e', 'r', '!' };
 
-		private static Position position = new Position(0, 0);
-
-		public static Action switcher = null;
-		public static Dictionary<System.ConsoleKey, Action> directionSwitcher = new Dictionary<System.ConsoleKey, Action>
+		public static Dictionary<System.ConsoleKey, Position> directionSwitcher = new Dictionary<System.ConsoleKey, Position>
 		{
-			{System.ConsoleKey.UpArrow, () => {
-					position.y += -1; position.x += 0;
-					} },
-			{System.ConsoleKey.DownArrow, () => {
-					position.y += 1; position.x += 0;
-					} },
-			{System.ConsoleKey.LeftArrow, () => {
-					position.y += 0; position.x += -1;
-					} },
-			{System.ConsoleKey.RightArrow, () => {
-					position.y += 0; position.x += 1;
-					} }
+			{System.ConsoleKey.UpArrow, Position.UP },
+			{System.ConsoleKey.DownArrow, Position.DOWN },
+			{System.ConsoleKey.LeftArrow, Position.LEFT },
+			{System.ConsoleKey.RightArrow, Position.RIGHT },
 		};
 
 		public static void FindPath(ConsoleKey key)
 		{
-			directionSwitcher.TryGetValue(key, out switcher);
-			switcher();
-			if (Field[position.y, position.x] == Food.Symbol)
-			{
-				Eat(position.y, position.x);
-			}
-			else if (Field[head.Y - 1, head.X] == "  ")
-			{
-				Move(position.y, position.x);
-			}
-			else
-			{
+			Position direction;
+			directionSwitcher.TryGetValue(key, out direction);
+
+			Position nextPosition = head.Add(direction);
+			string nextPositionSymbol = Field[nextPosition.y, nextPosition.x];
+
+			if (nextPositionSymbol == GetFieldObjectSymbol(FieldObject.FOOD)) {
+				Eat(nextPosition);
+			} else if (nextPositionSymbol == GetFieldObjectSymbol(FieldObject.EMPTY)) {
+				Move(nextPosition);
+			} else {
 				EndGame();
 			}
 		}
@@ -103,25 +107,27 @@ namespace Snake
 			stop = true;
 		}
 
-		public static void Eat(int nY, int nX)
-		{
-			Field[food.Y, food.X] = " ";
-			GenerateFood(Field, food);
-			head.Y = nY;
-			head.X = nX;
-			SnakePart npart = new SnakePart { Y = nY, X = nX };
-			Snake.Enqueue(npart);
-			score+=100;
-			UpdateField(Field, food);
+		private static void SetFieldObject(Position position, FieldObject fieldObject) {
+			Field[position.y, position.x] = GetFieldObjectSymbol(fieldObject);
 		}
 
-		public static void Move(int nY, int nX)
+		public static void Eat(Position position)
 		{
-			SnakePart npart = new SnakePart { Y = nY, X = nX };
-			Snake.Enqueue(npart);
+			SetFieldObject(position, FieldObject.EMPTY);
+			GenerateFood(Field);
+			head = position;
+			Snake.Enqueue(position);
+			score+=100;
+			UpdateField(Field);
+		}
+
+		public static void Move(Position pos)
+		{
+			Snake.Enqueue(pos);
+			var oldPos = Snake.Peek();
 			Snake.Dequeue();
-			head.Y = nY;
-			head.X = nX;
+			SetFieldObject(oldPos, FieldObject.EMPTY);
+			head = pos;
 		}
 
 		public static void Play(string[,] Field)
@@ -130,7 +136,7 @@ namespace Snake
 			while(!stop)
 			{
 				Console.Clear();
-				UpdateField(Field, food);
+				UpdateField(Field);
 				PrintField(Field, score, Settings.speed);
 				Thread.Sleep(Settings.delay/2);
 
@@ -156,29 +162,24 @@ namespace Snake
 			FillField(Field);
 			int w = Settings.x / 2;
 			int h = Settings.y / 2;
-			SnakePart part1 = new SnakePart { Y = h+2, X = w };
+			var part1 = new Position(h+2, w);
 			Snake.Enqueue(part1);
-			SnakePart part2 = new SnakePart { Y = h+1, X = w };
+			var part2 = new Position(h+1, w);
 			Snake.Enqueue(part2);
-			SnakePart part3 = new SnakePart { Y = h, X = w };
+			var part3 = new Position(h, w);
 			Snake.Enqueue(part3);
-			position.y = part3.Y;
-			position.x = part3.X;
-			head.Y = h;
-			head.X = w;
-			UpdateField(Field, food);
-			GenerateFood(Field, food);
+			head = part3;
+			UpdateField(Field);
+			GenerateFood(Field);
 			Play(Field);
 		}
 
-		public static void UpdateField(string[,] Field, Food food)
+		public static void UpdateField(string[,] Field)
 		{
-			FillField(Field); 
-			foreach (SnakePart parts in Snake)
+			foreach (Position part in Snake)
 			{
-				Field[parts.Y, parts.X] = SnakePart.Symbol;
+				SetFieldObject(part, FieldObject.SNAKE_PART);
 			}
-			Field[food.Y, food.X] = Food.Symbol;
 		}
 
 		public static void FillField(string[,] Field)
@@ -221,22 +222,38 @@ namespace Snake
 			}
 		}
 
-		public static void GenerateFood(string[,] Field, Food Food)
+		public static bool IsSnake(Position position)
+		{
+			return Field[position.y, position.x] == GetFieldObjectSymbol(FieldObject.SNAKE_PART);
+		}
+
+		public static void GenerateFood(string[,] Field)
 		{
 			Random random = new Random();
 			var rows = Field.GetLength(0);
 			var cols = Field.GetLength(1);
 			bool check = true;
-			do{
+			do {
 				int y = random.Next(1, rows-1);
 				int x = random.Next(1, cols-1);
-				if (Field[y,x]!=SnakePart.Symbol)
+				var pos = new Position(y, x);
+				if (!IsSnake(pos))
 				{
-					Food.Y=y;
-					Food.X=x;
+					SetFieldObject(pos, FieldObject.FOOD);
 					check = false;
 				}
-			}while(check);
+			} while(check);
+		}
+
+		public static string GetFieldObjectSymbol(FieldObject fieldObject) {
+			switch (fieldObject) {
+				case FieldObject.SNAKE_PART:
+					return "><";
+				case FieldObject.FOOD:
+					return "[]";
+				default:
+					return "  ";
+			}
 		}
 	}
 }
