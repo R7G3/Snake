@@ -72,10 +72,15 @@ namespace Snake
 			{System.ConsoleKey.RightArrow, Position.RIGHT },
 		};
 
+		public static Position direction;
+
 		public static void FindPath(ConsoleKey key)
 		{
-			Position direction;
-			directionSwitcher.TryGetValue(key, out direction);
+			//Position direction;
+			if (directionSwitcher.ContainsKey(key))
+			{
+				directionSwitcher.TryGetValue(key, out direction);
+			}
 
 			Position nextPosition = head.Add(direction);
 			string nextPositionSymbol = Field[nextPosition.y, nextPosition.x];
