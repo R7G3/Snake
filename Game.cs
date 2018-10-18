@@ -12,27 +12,6 @@ namespace Snake
 		WALL
 	}
 
-
-	class SnakePart
-	{
-		public int Y { get; set; }
-		public int X { get; set; }
-		public static readonly string Symbol = "><";
-	}
-
-	class Food
-	{
-		public int Y { get; set; }
-		public int X { get; set; }
-		public static readonly string Symbol = "[]";
-	}
-
-	class HeadPart
-	{
-		public int Y { get; set; }
-		public int X { get; set; }
-	}
-
 	class Position
 	{
 		public int y { get; set; }
@@ -76,7 +55,6 @@ namespace Snake
 
 		public static void FindPath(ConsoleKey key)
 		{
-			//Position direction;
 			if (directionSwitcher.ContainsKey(key))
 			{
 				directionSwitcher.TryGetValue(key, out direction);
